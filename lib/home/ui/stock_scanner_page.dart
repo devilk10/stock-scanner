@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stock_scanner/home/ui/variable_text_widget.dart';
 
 import '../data/scanner_result.dart';
-import 'stock_scanner_cubit.dart';
-import 'variable_text_widget.dart';
+import 'cubit/stock_scanner_cubit.dart';
 
-class StockScannerPage extends StatelessWidget {
+class StockScannerPage extends StatefulWidget {
   final StockScannerCubit stockScannerCubit;
 
   const StockScannerPage(
     this.stockScannerCubit, {
     super.key,
   });
+
+  @override
+  State<StockScannerPage> createState() => _StockScannerPageState();
+}
+
+class _StockScannerPageState extends State<StockScannerPage> {
+  @override
+  void initState() {
+    super.initState();
+    widget.stockScannerCubit.fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +32,7 @@ class StockScannerPage extends StatelessWidget {
         title: const Text('Stock Scanner 👀'),
       ),
       body: BlocBuilder<StockScannerCubit, StockScannerState>(
-        bloc: stockScannerCubit,
+        bloc: widget.stockScannerCubit,
         builder: (context, state) {
           if (state is StockScannerInitial || state is StockScannerLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -51,7 +62,8 @@ class StockScannerPage extends StatelessWidget {
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: buildCriteriaText(criteria),
+                                  child: buildCriteriaText(
+                                      criteria, scannerResult.name),
                                 );
                               }).toList(),
                             ),
@@ -70,7 +82,7 @@ class StockScannerPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          stockScannerCubit.fetchData();
+          widget.stockScannerCubit.fetchData();
         },
         child: const Icon(Icons.refresh),
       ),
@@ -89,9 +101,10 @@ class StockScannerPage extends StatelessWidget {
   }
 }
 
-Widget buildCriteriaText(Criteria criteria) {
+Widget buildCriteriaText(Criteria criteria, String title) {
   if (criteria.type == 'variable') {
     return VariableText(
+      title: title,
       text: criteria.text,
       variable: criteria.variable,
     );

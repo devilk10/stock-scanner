@@ -1,13 +1,19 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'variable_value_page.dart';
+import 'variable_page.dart';
 
 class VariableText extends StatelessWidget {
   final String text;
+  final String title;
   final Map<String, dynamic>? variable;
 
-  const VariableText({super.key, required this.text, required this.variable});
+  const VariableText({
+    super.key,
+    required this.text,
+    required this.variable,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +34,20 @@ class VariableText extends StatelessWidget {
         if (values.isNotEmpty) {
           textSpans.add(
             TextSpan(
-              text: "(${values[0]})",
+              text: "(${values[0]}) ",
               style: const TextStyle(
                 color: Colors.blue,
                 decoration: TextDecoration.underline,
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  handleVariableTap(context, variableKey, values);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return VariablePage(
+                          title, values, variable![variableKey]['type']);
+                    }),
+                  );
                 },
             ),
           );
@@ -54,16 +66,6 @@ class VariableText extends StatelessWidget {
 
     return RichText(
       text: TextSpan(children: textSpans),
-    );
-  }
-
-  void handleVariableTap(
-      BuildContext context, String variableKey, List<dynamic> values) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ValuePage(variableKey, values),
-      ),
     );
   }
 }
