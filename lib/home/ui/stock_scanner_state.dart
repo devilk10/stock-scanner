@@ -8,6 +8,11 @@ class StockScannerInitial extends StockScannerState {
   List<Object?> get props => [];
 }
 
+class StockScannerLoading extends StockScannerState {
+  @override
+  List<Object?> get props => [];
+}
+
 class StockScannerLoaded extends StockScannerState {
   final List<ScannerResult> data;
 

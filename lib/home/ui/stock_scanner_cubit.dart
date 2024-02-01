@@ -13,6 +13,7 @@ class StockScannerCubit extends Cubit<StockScannerState> {
   StockScannerCubit(this.repository) : super(StockScannerInitial());
 
   Future<void> fetchData() async {
+    emit(StockScannerLoading());
     try {
       final data = await repository.fetchData();
       emit(StockScannerLoaded(data: data));

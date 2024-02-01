@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../data/scanner_result.dart';
 import 'stock_scanner_cubit.dart';
 
 class StockScannerPage extends StatelessWidget {
@@ -21,7 +22,7 @@ class StockScannerPage extends StatelessWidget {
       body: BlocBuilder<StockScannerCubit, StockScannerState>(
         bloc: stockScannerCubit,
         builder: (context, state) {
-          if (state is StockScannerInitial) {
+          if (state is StockScannerInitial || state is StockScannerLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is StockScannerLoaded) {
             return ListView.builder(
@@ -34,24 +35,22 @@ class StockScannerPage extends StatelessWidget {
                       elevation: 2.0,
                       child: ExpansionTile(
                         title: Text(scannerResult.name),
-                        subtitle: Text(scannerResult.tag),
+                        subtitle: Text(
+                          scannerResult.tag,
+                          style: TextStyle(
+                              color: getColorFromScannerResult(scannerResult)),
+                        ),
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0, vertical: 8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: scannerResult.criteria.map((criteria) {
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(criteria.type),
-                                      Text(criteria.text),
-                                    ],
-                                  ),
+                                  child: Text(criteria.text),
                                 );
                               }).toList(),
                             ),
@@ -75,5 +74,16 @@ class StockScannerPage extends StatelessWidget {
         child: const Icon(Icons.refresh),
       ),
     );
+  }
+
+  Color getColorFromScannerResult(ScannerResult scannerResult) {
+    switch (scannerResult.color) {
+      case 'green':
+        return Colors.green;
+      case 'red':
+        return Colors.red;
+      default:
+        return Colors.black;
+    }
   }
 }
