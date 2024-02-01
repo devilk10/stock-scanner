@@ -5,10 +5,14 @@ import 'package:http/http.dart' as http;
 import 'scanner_result.dart';
 
 class StockScannerRepository {
-  Future<List<ScannerResult>> fetchData() async {
-    final response = await http
-        .get(Uri.parse('http://coding-assignment.bombayrunning.com/data.json'));
+  final http.Client client;
 
+  StockScannerRepository({required this.client});
+
+  Future<List<ScannerResult>> fetchData() async {
+    final response = await client.get(
+      Uri.parse('http://coding-assignment.bombayrunning.com/data.json'),
+    );
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
       final List<ScannerResult> scannerResults = data.map((item) {

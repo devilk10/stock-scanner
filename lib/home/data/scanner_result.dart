@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'scanner_result.g.dart';
@@ -21,14 +22,14 @@ class Criteria {
 }
 
 @JsonSerializable()
-class ScannerResult {
+class ScannerResult extends Equatable {
   final int id;
   final String name;
   final String tag;
   final String color;
   final List<Criteria> criteria;
 
-  ScannerResult({
+  const ScannerResult({
     required this.id,
     required this.name,
     required this.tag,
@@ -40,4 +41,7 @@ class ScannerResult {
       _$ScannerResultFromJson(json);
 
   Map<String, dynamic> toJson() => _$ScannerResultToJson(this);
+
+  @override
+  List<Object?> get props => [id, name, tag, color, criteria];
 }

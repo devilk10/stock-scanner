@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'home/data/stock_scanner_repository.dart';
 import 'home/ui/cubit/stock_scanner_cubit.dart';
@@ -11,8 +12,8 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  // This widget is the root of your application.
-  final stockScannerCubit = StockScannerCubit(StockScannerRepository());
+  final stockScannerCubit =
+      StockScannerCubit(StockScannerRepository(client: http.Client()));
 
   @override
   Widget build(BuildContext context) {
