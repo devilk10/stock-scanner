@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,7 +51,7 @@ class StockScannerPage extends StatelessWidget {
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text(criteria.text),
+                                  child: buildCriteriaText(criteria),
                                 );
                               }).toList(),
                             ),
@@ -86,4 +87,59 @@ class StockScannerPage extends StatelessWidget {
         return Colors.black;
     }
   }
+}
+
+Widget buildCriteriaText(Criteria criteria) {
+  if (criteria.type == 'variable') {
+    return buildVariableText(criteria.text, criteria.variable);
+  } else if (criteria.type == 'plain_text') {
+    return Text(criteria.text);
+  } else {
+    return Container();
+  }
+}
+
+Widget buildVariableText(String text, Map<String, dynamic>? variable) {
+  final List<TextSpan> textSpans = [];
+
+  final List<String> parts = text.split(" ");
+
+  for (var i = 0; i < parts.length; i++) {
+    if (i < parts.length) {
+      List<dynamic> values = [];
+      final String variableKey = parts[i];
+      if (variable!.containsKey(variableKey)) {
+        values = variable[variableKey]['values'] ?? [];
+      }
+
+      if (values.isNotEmpty) {
+        textSpans.add(
+          TextSpan(
+            text: "${parts[i]} ",
+            style: const TextStyle(
+              color: Colors.blue,
+              // decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                print('Tapped on variable: $variableKey, values: $values');
+              },
+          ),
+        );
+      } else {
+        textSpans.add(
+          TextSpan(
+            text: "${parts[i]} ",
+            style: const TextStyle(
+              color: Colors.black,
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  return RichText(
+    text: TextSpan(children: textSpans),
+  );
 }
