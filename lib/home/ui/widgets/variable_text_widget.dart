@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'variable_page.dart';
+import '../pages/variable_page.dart';
 
 class VariableText extends StatelessWidget {
   final String text;
@@ -45,7 +45,7 @@ class VariableText extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) {
                       return VariablePage(
-                          title, values, variable![variableKey]['type']);
+                          title, variable![variableKey], variable![variableKey]['type']);
                     }),
                   );
                 },

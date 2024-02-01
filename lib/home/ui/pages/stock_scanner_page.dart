@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stock_scanner/home/ui/variable_text_widget.dart';
+import 'package:stock_scanner/home/ui/widgets/variable_text_widget.dart';
 
-import '../data/scanner_result.dart';
-import 'cubit/stock_scanner_cubit.dart';
+import '../../data/scanner_result.dart';
+import '../cubit/stock_scanner_cubit.dart';
 
 class StockScannerPage extends StatefulWidget {
   final StockScannerCubit stockScannerCubit;
@@ -60,11 +60,15 @@ class _StockScannerPageState extends State<StockScannerPage> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: scannerResult.criteria.map((criteria) {
                                 return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: buildCriteriaText(
-                                      criteria, scannerResult.name),
-                                );
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0),
+                                    child: criteria.type == 'variable'
+                                        ? VariableText(
+                                            title: scannerResult.name,
+                                            text: criteria.text,
+                                            variable: criteria.variable,
+                                          )
+                                        : Text(criteria.text));
                               }).toList(),
                             ),
                           ),
@@ -98,17 +102,5 @@ class _StockScannerPageState extends State<StockScannerPage> {
       default:
         return Colors.black;
     }
-  }
-}
-
-Widget buildCriteriaText(Criteria criteria, String title) {
-  if (criteria.type == 'variable') {
-    return VariableText(
-      title: title,
-      text: criteria.text,
-      variable: criteria.variable,
-    );
-  } else {
-    return Text(criteria.text);
   }
 }

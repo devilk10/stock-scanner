@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'home/data/stock_scanner_repository.dart';
 import 'home/ui/cubit/stock_scanner_cubit.dart';
-import 'home/ui/stock_scanner_page.dart';
+import 'home/ui/pages/stock_scanner_page.dart';
 
 void main() {
   runApp(MyApp());

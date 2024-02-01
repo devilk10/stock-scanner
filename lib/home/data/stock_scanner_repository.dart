@@ -10,7 +10,7 @@ class StockScannerRepository {
         .get(Uri.parse('http://coding-assignment.bombayrunning.com/data.json'));
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+      final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
       final List<ScannerResult> scannerResults = data.map((item) {
         return ScannerResult.fromJson(item);
       }).toList();

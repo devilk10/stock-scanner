@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:stock_scanner/home/ui/variable_indicator_widget.dart';
-import 'package:stock_scanner/home/ui/variable_value_widget.dart';
+import 'package:stock_scanner/home/ui/widgets/variable_indicator_widget.dart';
+import 'package:stock_scanner/home/ui/widgets/variable_value_widget.dart';
 
 class VariablePage extends StatelessWidget {
   final String title;
-  final List<dynamic> values;
+  final Map<String, dynamic> values;
   final String variableType;
 
   const VariablePage(this.title, this.values, this.variableType, {super.key});
@@ -17,7 +17,7 @@ class VariablePage extends StatelessWidget {
         ),
         body: Center(
             child: variableType == "indicator"
-                ? VariableIndicatorWidget()
-                : VariableValueWidget(values: values)));
+                ? VariableIndicatorWidget(indicator: values)
+                : VariableValueWidget(values: values['values'])));
   }
 }
